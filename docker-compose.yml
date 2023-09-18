@@ -1,0 +1,36 @@
+version: '3.9'
+
+services:
+  youtrack:
+    image: jetbrains/youtrack:2023.1.17582
+    container_name: youtrack
+    hostname: youtrack
+    # mem_limit: 4g
+    # shm_size: 2g
+    # cpu_shares: 1024
+    security_opt:
+      - seccomp:unconfined
+    ports:
+      - 8080:8080
+    volumes:
+      - data:/opt/youtrack/data
+      - conf:/opt/youtrack/conf
+      - logs:/opt/youtrack/logs
+      - backups:/opt/youtrack/backups
+    networks:
+      - traefik-public
+    restart: unless-stopped
+
+volumes:
+  data:
+  conf:
+  logs:
+  backups:
+
+networks:
+  traefik-public:
+    external: true
+
+# docker exec -it youtrack sh
+# cd /opt/youtrack/conf/internal/services/configurationWizard
+# cat wizard_token.txt
